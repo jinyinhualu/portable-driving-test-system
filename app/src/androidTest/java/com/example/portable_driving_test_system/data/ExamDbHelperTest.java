@@ -37,37 +37,17 @@ public class ExamDbHelperTest {
     }
 
     @Test
-    public void freshDatabase_containsThreeQuestions_withoutDuplicates() {
+    public void freshDatabase_createsEmptyTables_withoutDemoQuestions() {
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE_NAME)) {
-
             SQLiteDatabase db = helper.getWritableDatabase();
-
             assertEquals(3, db.getVersion());
-            assertEquals(3L, DatabaseUtils.queryNumEntries(db, "questions"));
-            // 新数据库应该有答题记录表，但尚无答题记录
+            assertEquals(0L, DatabaseUtils.queryNumEntries(db, "questions"));
             assertEquals(0L, DatabaseUtils.queryNumEntries(db, "answer_records"));
-
-            String[] expectedTypes = {"single", "single", "judge"};
-            int rowIndex = 0;
-
-            try (Cursor cursor = db.query("questions", new String[]{"id", "question_type"}, null, null, null, null, "id ASC")) {
-                while (cursor.moveToNext()) {
-                    assertEquals(rowIndex + 1, cursor.getInt(0));
-                    assertEquals(expectedTypes[rowIndex], cursor.getString(1));
-                    rowIndex++;
-                }
-            }
-
-            assertEquals(3, rowIndex);
         }
 
-        // 关闭后重新打开同一个测试数据库
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE_NAME)) {
-
-            SQLiteDatabase db = helper.getReadableDatabase();
-
-            assertEquals(3L, DatabaseUtils.queryNumEntries(db, "questions"));
-            assertEquals(0L, DatabaseUtils.queryNumEntries(db, "answer_records"));
+            assertEquals(0L, DatabaseUtils.queryNumEntries(
+                    helper.getReadableDatabase(), "questions"));
         }
     }
 

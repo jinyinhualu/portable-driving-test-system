@@ -21,4 +21,12 @@
     <color name="green_accent">#208265</color>
 
     <color name="divider">#E8EDF5</color>
+    <color name="favorite_gold">#D99A00</color>
+    <color name="practice_entry_blue">#468CFF</color>
+    <color name="practice_entry_green">#31C88D</color>
+    <color name="practice_entry_teal">#13B9B5</color>
+    <color name="practice_entry_purple">#9270F8</color>
+    <color name="practice_entry_chevron">#91A0B8</color>
+    <color name="chapter_selection_background">#E7F0FF</color>
+    <color name="chapter_selection_border">#CDDEFC</color>
 </resources>

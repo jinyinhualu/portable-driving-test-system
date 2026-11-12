@@ -16,15 +16,34 @@ import com.example.portable_driving_test_system.model.Question;
 
 public class QuestionRepository {
 
+    private static final int[] RETIRED_QUESTION_IDS = {
+            1, 2, 3, 11401, 11402, 11403, 11404, 11405, 11406, 11407
+    };
+    private static final String RETIRED_IDS_SQL =
+            "(1,2,3,11401,11402,11403,11404,11405,11406,11407)";
+
     private final Context context;
+    private final String databaseName;
 
     public QuestionRepository(Context context) {
+        this(context, null);
+    }
+
+    // 测试可指定独立数据库，不影响真实题库和答题记录。
+    QuestionRepository(Context context, String databaseName) {
         this.context = context.getApplicationContext();
+        this.databaseName = databaseName;
+    }
+
+    private ExamDbHelper openHelper() {
+        return databaseName == null
+                ? new ExamDbHelper(context)
+                : new ExamDbHelper(context, databaseName);
     }
 
     // 获取题库中的题目总数
     public long getQuestionCount() {
-        try (ExamDbHelper helper = new ExamDbHelper(context)) {
+        try (ExamDbHelper helper = openHelper()) {
             SQLiteDatabase db = helper.getReadableDatabase();
             return DatabaseUtils.queryNumEntries(db, "questions");
         }
@@ -32,7 +51,7 @@ public class QuestionRepository {
 
     // 按编号读取题目；找不到时返回 null
     public Question getQuestionById(int id) {
-        try (ExamDbHelper helper = new ExamDbHelper(context)) {
+        try (ExamDbHelper helper = openHelper()) {
             SQLiteDatabase db = helper.getReadableDatabase();
 
             try (Cursor cursor = db.query(
@@ -64,7 +83,7 @@ public class QuestionRepository {
     public List<String> getChapters() {
         List<String> chapters = new ArrayList<>();
 
-        try (ExamDbHelper helper = new ExamDbHelper(context)) {
+        try (ExamDbHelper helper = openHelper()) {
             SQLiteDatabase db = helper.getReadableDatabase();
 
             try (Cursor cursor = db.query(
@@ -106,7 +125,7 @@ public class QuestionRepository {
 
         List<Question> questions = new ArrayList<>();
 
-        try (ExamDbHelper helper = new ExamDbHelper(context)) {
+        try (ExamDbHelper helper = openHelper()) {
             SQLiteDatabase db = helper.getReadableDatabase();
 
             try (Cursor cursor = db.query(
@@ -153,19 +172,23 @@ public class QuestionRepository {
         );
     }
 
-    // 从 assets 导入题库，已有编号的题目保留
+    // 同步随应用打包的题库：新增缺题、更新章节、清理明确退役的题号。
     public void importBundledQuestions()
             throws IOException, JSONException {
 
         List<Question> questions =
                 QuestionBankImporter.readQuestions(context);
 
-        try (ExamDbHelper helper = new ExamDbHelper(context)) {
+        try (ExamDbHelper helper = openHelper()) {
             SQLiteDatabase db = helper.getWritableDatabase();
 
             db.beginTransaction();
 
             try {
+                // 只移除三道旧示例题与外部题库末尾七道题。
+                db.delete("answer_records", "question_id IN " + RETIRED_IDS_SQL, null);
+                db.delete("questions", "id IN " + RETIRED_IDS_SQL, null);
+
                 String sql =
                         "INSERT OR IGNORE INTO questions " +
                                 "(id, chapter, question_type, content, " +
@@ -188,6 +211,13 @@ public class QuestionRepository {
                             question.getAnswerIndex(),
                             question.getExplanation()
                     });
+
+                    // INSERT OR IGNORE 不会更新旧行，需要单独同步新章节。
+                    // 保留真实题号以及题干、选项，已有有效答题记录继续对应。
+                    db.execSQL(
+                            "UPDATE questions SET chapter = ? WHERE id = ? AND chapter <> ?",
+                            new Object[]{question.getChapter(), question.getId(), question.getChapter()}
+                    );
                 }
 
                 db.setTransactionSuccessful();
@@ -195,6 +225,10 @@ public class QuestionRepository {
             } finally {
                 db.endTransaction();
             }
+        }
+
+        if (databaseName == null) {
+            new QuestionMarkStore(context).clearMarks(RETIRED_QUESTION_IDS);
         }
     }
 }

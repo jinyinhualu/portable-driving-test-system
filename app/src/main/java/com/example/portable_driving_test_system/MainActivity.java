@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.TextView;
+import android.content.Intent;
 
 import java.io.IOException;
 import org.json.JSONException;
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        MaterialCardView btnPractice = findViewById(R.id.btnPractice);
+        // 更新完成后再开放练习入口，避免读到旧章节或尚未导入的题库。
+        btnPractice.setEnabled(false);
 
         TextView tvOverviewHint = findViewById(R.id.tvOverviewHint);
         tvOverviewHint.setText(R.string.overview_loading);
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     tvOverviewHint.setText(
                             getString(R.string.overview_question_count, questionCount)
                     );
+                    btnPractice.setEnabled(true);
                 });
 
             } catch (SQLiteException | IllegalStateException | IllegalArgumentException | IOException | JSONException e) {
@@ -66,23 +72,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        // 获取题库练习按键
-        MaterialCardView btnPractice = findViewById(R.id.btnPractice);
-        // 设置题库练习点击设置
-        btnPractice.setOnClickListener(view -> {
-            Toast.makeText(MainActivity.this, R.string.practice_entry_hint, Toast.LENGTH_SHORT).show();
+        // 题库练习入口
+        btnPractice.setOnClickListener(view -> {Intent intent = new Intent(MainActivity.this, PracticeSelectionActivity.class);
+            startActivity(intent);
         });
 
-        // 获取错题库按键
+        // 错题本入口
         MaterialCardView btnMistakes = findViewById(R.id.btnMistakes);
-        // 设置错题库点击设置
-        btnMistakes.setOnClickListener(view -> {
-            Toast.makeText(MainActivity.this, R.string.mistakes_entry_hint, Toast.LENGTH_SHORT).show();
+
+        btnMistakes.setOnClickListener(view -> {Toast.makeText(MainActivity.this, R.string.mistakes_entry_hint, Toast.LENGTH_SHORT).show();
         });
 
-        // 获取模拟考试按键
+        // 模拟考试入口
         MaterialCardView btnExam = findViewById(R.id.btnExam);
-        // 设置模拟考试点击设置
+
         btnExam.setOnClickListener(view -> {
             Toast.makeText(MainActivity.this, R.string.exam_entry_hint, Toast.LENGTH_SHORT).show();
         });

@@ -31,10 +31,68 @@
 
     <string name="home_bank_title">题库说明</string>
     <string name="home_bank_description">查看题库来源与收录范围</string>
-    <string name="home_bank_message">当前题库由两部分组成：\n\n• 外部导入：1407 道\n• 教学示例：3 道\n\n外部来源：doupoa/DrivingTestSubjectOne\n来源标注更新日期：2022-07-17\n\n本次收录纯文字单选题和判断题，不含图片题。该题库用于课程学习与功能演示。</string>
+    <string name="home_bank_message">当前题库共1400道，划分为7个章节，每章200题。\n\n整理方式：按原题号排序，保留原1407题中的前1400题，移除末尾7题及3道教学示例。章节按数量划分，不代表知识主题分类。\n\n外部来源：doupoa/DrivingTestSubjectOne\n来源标注更新日期：2022-07-17\n\n本次收录纯文字单选题和判断题，不含图片题。该历史题库用于课程学习与功能演示。</string>
     <string name="action_understood">我知道了</string>
 
     <string name="overview_loading">正在准备题库…</string>
-    <string name="overview_question_count">本地题库共 %1$d 道（历史题库与教学示例）</string>
+    <string name="overview_question_count">本地题库共 %1$d 道 · 7个章节，每章200题</string>
     <string name="overview_load_error">题库准备失败，请查看日志。</string>
+
+    <string name="practice_selection_hint">选择章节或题型，开始专项练习。</string>
+    <string name="practice_back_home">返回首页</string>
+    <string name="practice_chapter_title">按章节练习</string>
+    <string name="practice_chapter_hint">共7个章节，每章200题，选择后开始练习。</string>
+    <string name="practice_chapters_loading">正在读取章节…</string>
+    <string name="practice_chapters_ready">章节已加载，请选择。</string>
+    <string name="practice_chapters_empty">暂无可用章节。</string>
+    <string name="practice_chapters_error">章节读取失败，请返回后重试。</string>
+    <string name="practice_start_chapter">开始章节练习</string>
+
+    <string name="practice_session_title">题库练习</string>
+    <string name="practice_current_chapter">当前章节：%1$s</string>
+    <string name="practice_back_selection">返回练习选择</string>
+    <string name="practice_questions_loading">正在加载题目…</string>
+    <string name="practice_questions_empty">当前范围暂无题目，请返回重新选择。</string>
+    <string name="practice_questions_error">题目加载失败，请返回后重试。</string>
+    <string name="practice_question_progress">第 %1$d / %2$d 题 · %3$s</string>
+    <string name="practice_type_single">单选题</string>
+    <string name="practice_type_judge">判断题</string>
+    <string name="practice_option_text">%1$s. %2$s</string>
+    <string name="practice_submit">提交答案</string>
+    <string name="practice_submitted">已提交</string>
+    <string name="practice_choose_first">请先选择一个答案</string>
+    <string name="practice_answer_correct">回答正确</string>
+    <string name="practice_answer_wrong">回答错误</string>
+    <string name="practice_answer_feedback">%1$s\n正确答案：%2$s. %3$s</string>
+    <string name="practice_explanation">解析：%1$s</string>
+    <string name="practice_previous">上一题</string>
+    <string name="practice_next">下一题</string>
+
+    <string name="practice_type_title">按题型练习</string>
+    <string name="practice_type_hint">从整个题库中，选择一种题型专项练习。</string>
+    <string name="practice_start_single">单选题练习</string>
+    <string name="practice_start_judge">判断题练习</string>
+    <string name="practice_current_type">当前题型：%1$s</string>
+
+    <string name="practice_mark_question">收藏本题</string>
+    <string name="practice_marked">已收藏，点击取消收藏</string>
+
+    <string name="practice_marked_title">收藏题练习</string>
+    <string name="practice_marked_hint">集中复习你收藏的题目。</string>
+    <string name="practice_start_marked">开始收藏题练习</string>
+    <string name="practice_current_marked">当前范围：收藏题目</string>
+    <string name="practice_marked_empty">还没有收藏题目。先在章节或题型练习中点击星星收藏，再来这里复习。</string>
+
+    <string name="practice_saving_answer">正在保存…</string>
+    <string name="practice_save_answer_error">答案保存失败，请重试提交。</string>
+
+    <string name="practice_select_chapter">选择练习章节</string>
+    <string name="practice_entry_chapter">章节练习</string>
+    <string name="practice_entry_chapter_hint">按所选章节练习，循序巩固</string>
+    <string name="practice_entry_single_hint">专项练习单选题，理解解析</string>
+    <string name="practice_entry_judge_hint">辨别对错，巩固易混知识</string>
+    <string name="practice_entry_favorite_hint">针对收藏，巩固重点</string>
+
+    <string name="practice_selection_toolbar_title">练习中心</string>
+
 </resources>
