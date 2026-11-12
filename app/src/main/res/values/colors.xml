@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- 主色与页面背景 -->
+    <color name="brand_blue">#245EE8</color>
+    <color name="brand_blue_light">#368CF3</color>
+    <color name="page_background">#F3F6FB</color>
+
+    <!-- 文字层次 -->
+    <color name="text_primary">#18263D</color>
+    <color name="text_secondary">#647087</color>
+    <color name="text_on_blue">#EAF2FF</color>
+
+    <!-- 图标区域的辅助颜色 -->
+    <color name="blue_soft">#EAF1FF</color>
+    <color name="orange_soft">#FFF1E3</color>
+    <color name="orange_accent">#B86517</color>
+    <color name="green_soft">#E3F6ED</color>
+    <color name="green_accent">#208265</color>
+
+    <color name="divider">#E8EDF5</color>
+</resources>

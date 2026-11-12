@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">随身驾考</string>
+    <string name="home_subtitle">C1 科目一 · 练习、复习与模拟考试</string>
+    <string name="home_brand_tag">科目一 · 学习中心</string>
+    <string name="home_slogan">每天进步一点，\n让备考更有方向。</string>
+
+    <string name="overview_title">学习概览</string>
+    <string name="overview_hint">开始练习后，这里将记录你的学习进度。</string>
+
+    <string name="action_practice">题库练习</string>
+    <string name="practice_card_symbol">练</string>
+    <string name="practice_card_description">按章节与题型，逐题理解解析</string>
+    <string name="practice_entry_hint">题库练习功能尚未接入</string>
+
+    <string name="action_mistakes">错题本</string>
+    <string name="mistakes_card_symbol">错</string>
+    <string name="mistakes_card_description">重练错题\n巩固薄弱知识</string>
+    <string name="mistakes_entry_hint">错题本功能尚未接入</string>
+
+    <string name="action_exam">模拟考试</string>
+    <string name="exam_card_symbol">考</string>
+    <string name="exam_card_description">计时作答\n检验学习成果</string>
+    <string name="exam_entry_hint">模拟考试功能尚未接入</string>
+
+    <string name="home_progress_title">学习足迹</string>
+    <string name="home_practiced_label">已练题目</string>
+    <string name="home_mistakes_label">待复习错题</string>
+    <string name="home_score_label">最近成绩</string>
+    <string name="home_stat_placeholder">—</string>
+    <string name="home_progress_hint">完成练习与考试后，在这里回顾学习进度。</string>
+
+    <string name="home_bank_title">题库说明</string>
+    <string name="home_bank_description">查看题库来源与收录范围</string>
+    <string name="home_bank_message">当前题库由两部分组成：\n\n• 外部导入：1407 道\n• 教学示例：3 道\n\n外部来源：doupoa/DrivingTestSubjectOne\n来源标注更新日期：2022-07-17\n\n本次收录纯文字单选题和判断题，不含图片题。该题库用于课程学习与功能演示。</string>
+    <string name="action_understood">我知道了</string>
+
+    <string name="overview_loading">正在准备题库…</string>
+    <string name="overview_question_count">本地题库共 %1$d 道（历史题库与教学示例）</string>
+    <string name="overview_load_error">题库准备失败，请查看日志。</string>
+</resources>
