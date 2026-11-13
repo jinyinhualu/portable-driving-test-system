@@ -1,7 +1,6 @@
 package com.example.portable_driving_test_system;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +19,16 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.example.portable_driving_test_system.data.QuestionRepository;
 import com.example.portable_driving_test_system.data.WrongQuestionRepository;
+import com.example.portable_driving_test_system.data.ExamRecordRepository;
+import com.example.portable_driving_test_system.data.LearningProgressRepository;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvMistakeCount;
+    private TextView tvPracticedCount;
+    private int practicedCountRequestId;
+    private TextView tvLatestScore;
+    private int latestScoreRequestId;
     private boolean preparingQuestionBank = true;
     private int wrongCountRequestId = 0;
 
@@ -33,10 +38,14 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         tvMistakeCount = findViewById(R.id.tvMistakeCount);
+        tvPracticedCount = findViewById(R.id.tvPracticedCount);
+        tvLatestScore = findViewById(R.id.tvLatestScore);
 
         MaterialCardView btnPractice = findViewById(R.id.btnPractice);
         // 更新完成后再开放练习入口，避免读到旧章节或尚未导入的题库。
         btnPractice.setEnabled(false);
+        MaterialCardView btnExam = findViewById(R.id.btnExam);
+        btnExam.setEnabled(false);
 
         TextView tvOverviewHint = findViewById(R.id.tvOverviewHint);
         tvOverviewHint.setText(R.string.overview_loading);
@@ -63,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
                             getString(R.string.overview_question_count, questionCount)
                     );
                     btnPractice.setEnabled(true);
+                    btnExam.setEnabled(true);
                     preparingQuestionBank = false;
                     refreshWrongQuestionCount();
+                    refreshPracticedCount();
                 });
 
             } catch (SQLiteException | IllegalStateException | IllegalArgumentException | IOException | JSONException e) {
@@ -78,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     tvOverviewHint.setText(R.string.overview_load_error);
                     preparingQuestionBank = false;
                     refreshWrongQuestionCount();
+                    refreshPracticedCount();
                 });
             }
         }).start();
@@ -95,10 +107,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 模拟考试入口
-        MaterialCardView btnExam = findViewById(R.id.btnExam);
 
         btnExam.setOnClickListener(view -> {
-            Toast.makeText(MainActivity.this, R.string.exam_entry_hint, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, ExamPreparationActivity.class));
         });
 
         // 点击题库说明，展示来源与收录范围
@@ -120,10 +131,51 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshLatestScore();
         // 首次启动等题库整理完成；从练习或错题本返回时重新读取。
         if (!preparingQuestionBank) {
             refreshWrongQuestionCount();
+            refreshPracticedCount();
         }
+    }
+
+    private void refreshPracticedCount() {
+        int requestId = ++practicedCountRequestId;
+        tvPracticedCount.setText(R.string.home_stat_placeholder);
+        new Thread(() -> {
+            try {
+                long count = new LearningProgressRepository(getApplicationContext())
+                        .getPracticedQuestionCount();
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed() || requestId != practicedCountRequestId) {
+                        return;
+                    }
+                    tvPracticedCount.setText(getString(R.string.home_practiced_count, count));
+                });
+            } catch (SQLiteException | IllegalStateException e) {
+                // 读取失败保留占位符，避免把失败误显示为从未练习。
+                Log.e("LearningProgress", "读取已练题数失败", e);
+            }
+        }).start();
+    }
+
+    private void refreshLatestScore() {
+        int requestId = ++latestScoreRequestId;
+        tvLatestScore.setText(R.string.home_stat_placeholder);
+        new Thread(() -> {
+            try {
+                Integer score = new ExamRecordRepository(getApplicationContext()).getLatestScore();
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed() || requestId != latestScoreRequestId) {
+                        return;
+                    }
+                    tvLatestScore.setText(score == null ? getString(R.string.home_stat_placeholder)
+                            : getString(R.string.exam_result_count, score));
+                });
+            } catch (SQLiteException | IllegalStateException e) {
+                Log.e("ExamRecord", "读取首页最近成绩失败", e);
+            }
+        }).start();
     }
 
     private void refreshWrongQuestionCount() {

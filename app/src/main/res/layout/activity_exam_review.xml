@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/examReviewRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/page_background"
+    android:orientation="vertical">
+
+    <!-- 固定顶部导航，页面滚动时返回箭头保持可见 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_home_header">
+
+        <TextView
+            android:id="@+id/tvExamReviewToolbarTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="56dp"
+            android:gravity="center"
+            android:text="@string/exam_review_title"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnBackFromExamReview"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="4dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_practice_back_ripple"
+            android:contentDescription="@string/exam_review_back"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_practice_back"
+            app:tint="@color/white" />
+
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/scrollExamReview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tvExamReviewSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/exam_review_loading"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExamReviewRetry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/exam_retry"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:backgroundTint="@color/brand_blue"
+                app:cornerRadius="16dp" />
+
+            <!-- 题目卡片 -->
+            <LinearLayout
+                android:id="@+id/examReviewCard"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_overview"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvExamReviewProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/exam_review_loading"
+                    android:textColor="@color/brand_blue"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvExamReviewContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutExamReviewOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/tvExamReviewYourAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/orange_accent"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvExamReviewCorrectAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/green_accent"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvExamReviewExplanation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- 切题按钮 -->
+            <LinearLayout
+                android:id="@+id/examReviewNavigation"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReviewPrevious"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:enabled="false"
+                    android:text="@string/practice_previous"
+                    app:backgroundTint="@color/brand_blue"
+                    app:cornerRadius="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReviewNext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:enabled="false"
+                    android:text="@string/practice_next"
+                    app:backgroundTint="@color/brand_blue"
+                    app:cornerRadius="16dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

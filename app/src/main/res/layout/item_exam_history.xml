@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_overview"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvHistoryTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvHistoryScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/brand_blue"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvHistoryPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvHistoryDuration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvHistoryMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/exam_history_item_hint"
+        android:textColor="@color/brand_blue"
+        android:textSize="13sp" />
+
+</LinearLayout>

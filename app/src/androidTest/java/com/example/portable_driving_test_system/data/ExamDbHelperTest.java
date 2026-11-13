@@ -40,10 +40,11 @@ public class ExamDbHelperTest {
     public void freshDatabase_createsEmptyTables_withoutDemoQuestions() {
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE_NAME)) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            assertEquals(4, db.getVersion());
+            assertEquals(5, db.getVersion());
             assertEquals(0L, DatabaseUtils.queryNumEntries(db, "questions"));
             assertEquals(0L, DatabaseUtils.queryNumEntries(db, "answer_records"));
             assertEquals(0L, DatabaseUtils.queryNumEntries(db, "wrong_questions"));
+            assertEquals(0L, DatabaseUtils.queryNumEntries(db, "exam_records"));
         }
 
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE_NAME)) {
@@ -87,12 +88,12 @@ public class ExamDbHelperTest {
             oldDb.setVersion(2);
         }
 
-        // 用当前第四版帮助类打开，触发升级
+        // 用当前第五版帮助类打开，触发升级
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE_NAME)) {
 
             SQLiteDatabase db = helper.getWritableDatabase();
 
-            assertEquals(4, db.getVersion());
+            assertEquals(5, db.getVersion());
 
             // 原有题目应当保留
             assertEquals(1L, DatabaseUtils.queryNumEntries(db, "questions")

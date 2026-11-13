@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/examResultPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/exam_result_heading"
+        android:textColor="@color/text_primary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvExamSubmissionReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_overview"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvExamScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/brand_blue"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvExamPassStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/exam_result_score_rule"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_overview"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/exam_result_breakdown"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvExamCorrectCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/green_accent"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/exam_result_correct"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvExamWrongCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/orange_accent"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/exam_result_wrong"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvExamUnansweredCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/exam_result_unanswered"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/exam_result_unanswered_note"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvExamSaveStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRetryExamSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/exam_record_retry"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:backgroundTint="@color/brand_blue"
+        app:cornerRadius="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnExamAnalysis"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="56dp"
+        android:enabled="false"
+        android:text="@string/exam_analysis_action"
+        android:textColor="@color/brand_blue"
+        app:strokeColor="@color/brand_blue"
+        app:cornerRadius="16dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReviewExam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:minHeight="56dp"
+        android:enabled="false"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brand_blue"
+        app:cornerRadius="16dp" />
+
+</LinearLayout>

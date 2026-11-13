@@ -33,6 +33,24 @@
         <activity
             android:name=".WrongQuestionActivity"
             android:exported="false" />
+        <activity
+            android:name=".ExamPreparationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamHistoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamAnalysisActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

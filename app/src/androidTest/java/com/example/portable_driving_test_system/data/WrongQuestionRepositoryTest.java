@@ -171,6 +171,7 @@ public class WrongQuestionRepositoryTest {
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE)) {
             SQLiteDatabase db = helper.getWritableDatabase();
             db.execSQL("DROP TABLE wrong_questions");
+            db.execSQL("DROP TABLE exam_records");
             db.execSQL("INSERT INTO answer_records "
                     + "(question_id,selected_index,is_correct,source,answered_at) "
                     + "VALUES (10001,1,0,'practice',100),(10001,1,0,'practice',200),"
@@ -181,7 +182,7 @@ public class WrongQuestionRepositoryTest {
         assertEquals(1, wrongQuestions.getWrongQuestions().size());
         try (ExamDbHelper helper = new ExamDbHelper(context, TEST_DATABASE)) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            assertEquals(4, db.getVersion());
+            assertEquals(5, db.getVersion());
             assertEquals(1L, DatabaseUtils.queryNumEntries(db, "wrong_questions"));
             // 模拟用户以后移除错题：保留历史记录，再次打开不应重新导入。
             db.delete("wrong_questions", null, null);

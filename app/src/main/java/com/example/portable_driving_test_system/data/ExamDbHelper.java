@@ -10,7 +10,7 @@ public class ExamDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "driving_exam.db";
 
     // 数据库结构版本
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // 正式应用使用默认数据库
     public ExamDbHelper(Context context) {
@@ -39,6 +39,7 @@ public class ExamDbHelper extends SQLiteOpenHelper {
         // 题目统一由随应用打包的外部题库导入，不再创建示例题。
         createAnswerRecordsTable(db);
         createWrongQuestionsTable(db);
+        createExamRecordsTable(db);
     }
 
     // 创建公共答题记录表
@@ -63,6 +64,17 @@ public class ExamDbHelper extends SQLiteOpenHelper {
                 + "added_at INTEGER NOT NULL)");
     }
 
+    // 每场考试一个唯一标识，页面重建或保存重试不会重复生成成绩。
+    private void createExamRecordsTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE exam_records ("
+                + "id INTEGER PRIMARY KEY, session_id TEXT NOT NULL UNIQUE, "
+                + "submitted_at INTEGER NOT NULL, elapsed_millis INTEGER NOT NULL, "
+                + "auto_submitted INTEGER NOT NULL CHECK(auto_submitted IN (0,1)), "
+                + "score INTEGER NOT NULL, correct_count INTEGER NOT NULL, "
+                + "wrong_count INTEGER NOT NULL, unanswered_count INTEGER NOT NULL, "
+                + "question_ids_json TEXT NOT NULL, answers_json TEXT NOT NULL)");
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 3) {
@@ -75,6 +87,9 @@ public class ExamDbHelper extends SQLiteOpenHelper {
                     + "SELECT r.question_id, MIN(r.answered_at) "
                     + "FROM answer_records r INNER JOIN questions q ON q.id = r.question_id "
                     + "WHERE r.is_correct = 0 GROUP BY r.question_id");
+        }
+        if (oldVersion < 5) {
+            createExamRecordsTable(db);
         }
     }
 }
