@@ -30,6 +30,9 @@
         <activity
             android:name=".PracticeActivity"
             android:exported="false" />
+        <activity
+            android:name=".WrongQuestionActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

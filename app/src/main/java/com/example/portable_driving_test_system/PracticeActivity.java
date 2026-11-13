@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.example.portable_driving_test_system.data.QuestionRepository;
+import com.example.portable_driving_test_system.data.WrongQuestionRepository;
 import com.example.portable_driving_test_system.data.AnswerRecordRepository;
 import com.example.portable_driving_test_system.data.QuestionMarkStore;
 import com.example.portable_driving_test_system.model.Question;
@@ -34,6 +35,8 @@ public class PracticeActivity extends AppCompatActivity {
     public static final String EXTRA_CHAPTER = "extra_chapter";
     public static final String EXTRA_TYPE = "extra_type";
     public static final String EXTRA_MARKED_ONLY = "extra_marked_only";
+    public static final String EXTRA_WRONG_ONLY = "extra_wrong_only";
+    public static final String EXTRA_START_QUESTION_ID = "extra_start_question_id";
 
     // 当前章节的题目，以及当前显示的位置
     private List<Question> questions = new ArrayList<>();
@@ -57,6 +60,7 @@ public class PracticeActivity extends AppCompatActivity {
     // 当前题是否已经提交
     private boolean currentSubmitted = false;
     private boolean savingAnswer = false;
+    private boolean wrongOnly = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +71,18 @@ public class PracticeActivity extends AppCompatActivity {
         String chapter = getIntent().getStringExtra(EXTRA_CHAPTER);
         String type = getIntent().getStringExtra(EXTRA_TYPE);
         boolean markedOnly = getIntent().getBooleanExtra(EXTRA_MARKED_ONLY, false);
+        wrongOnly = getIntent().getBooleanExtra(EXTRA_WRONG_ONLY, false);
+        int startQuestionId = getIntent().getIntExtra(EXTRA_START_QUESTION_ID, -1);
 
         TextView tvPracticeChapter = findViewById(R.id.tvPracticeChapter);
 
-        if (markedOnly) {
+        if (wrongOnly) {
+            tvPracticeChapter.setText(R.string.practice_current_wrong);
+            TextView toolbarTitle = findViewById(R.id.tvPracticeToolbarTitle);
+            toolbarTitle.setText(R.string.wrong_review_title);
+            findViewById(R.id.btnBackSelection).setContentDescription(
+                    getString(R.string.wrong_review_back));
+        } else if (markedOnly) {
             tvPracticeChapter.setText(R.string.practice_current_marked);
         } else if (type != null) {
             // 按题型进入时，只接受题库支持的两种类型。
@@ -145,18 +157,20 @@ public class PracticeActivity extends AppCompatActivity {
                 }
         );
 
-        loadQuestions(chapter, type, markedOnly);
+        loadQuestions(chapter, type, markedOnly, startQuestionId);
     }
 
     // 根据入口，在后台按章节、题型或用户标记读取本轮题目。
-    private void loadQuestions(String chapter, String type, boolean markedOnly) {
+    private void loadQuestions(String chapter, String type, boolean markedOnly, int startQuestionId) {
         new Thread(() -> {
             try {
                 QuestionRepository repository =
                         new QuestionRepository(getApplicationContext());
 
                 List<Question> loaded;
-                if (markedOnly) {
+                if (wrongOnly) {
+                    loaded = new WrongQuestionRepository(getApplicationContext()).getWrongQuestions();
+                } else if (markedOnly) {
                     // 复用已有查询，再按真实题号匹配本地标记。
                     // 本轮列表固定，取消标记后下次进入时不再收录。
                     loaded = new ArrayList<>();
@@ -178,8 +192,8 @@ public class PracticeActivity extends AppCompatActivity {
 
                     if (loaded.isEmpty()) {
                         tvQuestionProgress.setText(
-                                markedOnly
-                                        ? R.string.practice_marked_empty
+                                wrongOnly ? R.string.wrong_questions_empty
+                                        : markedOnly ? R.string.practice_marked_empty
                                         : R.string.practice_questions_empty
                         );
                         // 没有题目时只保留说明和返回入口。
@@ -201,6 +215,14 @@ public class PracticeActivity extends AppCompatActivity {
                     submittedStates = new boolean[questions.size()];
 
                     currentIndex = 0;
+                    if (wrongOnly && startQuestionId > 0) {
+                        for (int i = 0; i < questions.size(); i++) {
+                            if (questions.get(i).getId() == startQuestionId) {
+                                currentIndex = i;
+                                break;
+                            }
+                        }
+                    }
                     showCurrentQuestion();
                 });
 
@@ -370,7 +392,9 @@ public class PracticeActivity extends AppCompatActivity {
             try {
                 AnswerRecordRepository repository =
                         new AnswerRecordRepository(getApplicationContext());
-                long recordId = repository.savePracticeAnswer(question, selectedIndex);
+                long recordId = wrongOnly
+                        ? repository.saveWrongReviewAnswer(question, selectedIndex)
+                        : repository.savePracticeAnswer(question, selectedIndex);
                 Log.d("AnswerRecord", "答题记录已保存，记录编号：" + recordId
                         + "，题号：" + question.getId());
 

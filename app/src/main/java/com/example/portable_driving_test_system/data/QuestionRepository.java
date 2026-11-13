@@ -149,7 +149,7 @@ public class QuestionRepository {
     }
 
     // 将游标当前所在的一行转换为题目对象
-    private Question readQuestion(Cursor cursor) throws JSONException {
+    static Question readQuestion(Cursor cursor) throws JSONException {
         String optionsJson = cursor.getString(
                 cursor.getColumnIndexOrThrow("options_json")
         );
@@ -186,6 +186,7 @@ public class QuestionRepository {
 
             try {
                 // 只移除三道旧示例题与外部题库末尾七道题。
+                db.delete("wrong_questions", "question_id IN " + RETIRED_IDS_SQL, null);
                 db.delete("answer_records", "question_id IN " + RETIRED_IDS_SQL, null);
                 db.delete("questions", "id IN " + RETIRED_IDS_SQL, null);
 

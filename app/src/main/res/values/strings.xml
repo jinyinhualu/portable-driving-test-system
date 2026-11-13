@@ -25,6 +25,7 @@
     <string name="home_progress_title">学习足迹</string>
     <string name="home_practiced_label">已练题目</string>
     <string name="home_mistakes_label">待复习错题</string>
+    <string name="home_mistakes_count">%1$d</string>
     <string name="home_score_label">最近成绩</string>
     <string name="home_stat_placeholder">—</string>
     <string name="home_progress_hint">完成练习与考试后，在这里回顾学习进度。</string>
@@ -94,5 +95,30 @@
     <string name="practice_entry_favorite_hint">针对收藏，巩固重点</string>
 
     <string name="practice_selection_toolbar_title">练习中心</string>
+
+    <string name="wrong_questions_hint">答错自动收录，同一道题只收录一次。点击卡片重练，左滑可移除。</string>
+    <string name="wrong_questions_loading">正在读取错题…</string>
+    <string name="wrong_questions_count">共 %1$d 道错题</string>
+    <string name="wrong_questions_empty">暂时没有错题\n练习中答错的题目会自动出现在这里。</string>
+    <string name="wrong_questions_error">错题加载失败，请返回后重试。</string>
+    <string name="wrong_question_summary">%1$s · %2$s · 点击重练</string>
+
+    <string name="wrong_review_title">错题重练</string>
+    <string name="practice_current_wrong">当前范围：错题本</string>
+    <string name="wrong_review_back">返回错题本</string>
+
+    <string name="wrong_remove_title">移除这道错题？</string>
+    <string name="wrong_remove_message">%1$s\n\n仅从错题本移除，题库原题、收藏和答题历史保留。之后再次答错仍会收录。</string>
+    <string name="wrong_remove_confirm">移除</string>
+    <string name="wrong_remove_cancel">取消</string>
+    <string name="wrong_remove_success">已从错题本移除</string>
+    <string name="wrong_remove_error">移除失败，请重试。</string>
+
+    <string name="wrong_clear_action">清空</string>
+    <string name="wrong_clear_title">清空错题本？</string>
+    <string name="wrong_clear_message">将移除全部 %1$d 道错题，题库原题、收藏和答题历史保留。此操作无法撤销，之后再次答错仍会收录。</string>
+    <string name="wrong_clear_confirm">确认清空</string>
+    <string name="wrong_clear_success">错题本已清空</string>
+    <string name="wrong_clear_error">清空失败，请重试。</string>
 
 </resources>

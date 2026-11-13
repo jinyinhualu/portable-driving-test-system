@@ -23,23 +23,47 @@ public class AnswerRecordRepository {
     }
 
     public long savePracticeAnswer(Question question, int selectedIndex) {
+        return saveAnswer(question, selectedIndex, "practice");
+    }
+
+    public long saveWrongReviewAnswer(Question question, int selectedIndex) {
+        return saveAnswer(question, selectedIndex, "wrong_review");
+    }
+
+    private long saveAnswer(Question question, int selectedIndex, String source) {
         if (question == null || selectedIndex < 0
                 || selectedIndex >= question.getOptions().length) {
             throw new IllegalArgumentException("所选答案不在题目选项范围内");
         }
 
+        boolean isCorrect = selectedIndex == question.getAnswerIndex();
+        long answeredAt = System.currentTimeMillis();
         ContentValues values = new ContentValues();
         values.put("question_id", question.getId());
         values.put("selected_index", selectedIndex);
-        values.put("is_correct", selectedIndex == question.getAnswerIndex() ? 1 : 0);
-        values.put("source", "practice");
-        values.put("answered_at", System.currentTimeMillis());
+        values.put("is_correct", isCorrect ? 1 : 0);
+        values.put("source", source);
+        values.put("answered_at", answeredAt);
 
         try (ExamDbHelper helper = databaseName == null
                 ? new ExamDbHelper(context)
                 : new ExamDbHelper(context, databaseName)) {
             SQLiteDatabase db = helper.getWritableDatabase();
-            return db.insertOrThrow("answer_records", null, values);
+            // 答题记录和错题收录一起成功；任一步失败就整体回滚。
+            db.beginTransaction();
+            try {
+                long recordId = db.insertOrThrow("answer_records", null, values);
+                if (!isCorrect) {
+                    db.execSQL(
+                            "INSERT OR IGNORE INTO wrong_questions (question_id,added_at) VALUES (?,?)",
+                            new Object[]{question.getId(), answeredAt}
+                    );
+                }
+                db.setTransactionSuccessful();
+                return recordId;
+            } finally {
+                db.endTransaction();
+            }
         }
     }
 }

@@ -29,4 +29,5 @@
     <color name="practice_entry_chevron">#91A0B8</color>
     <color name="chapter_selection_background">#E7F0FF</color>
     <color name="chapter_selection_border">#CDDEFC</color>
+    <color name="wrong_remove_red">#E7515A</color>
 </resources>

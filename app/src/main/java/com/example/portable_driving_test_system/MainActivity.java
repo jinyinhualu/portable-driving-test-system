@@ -19,14 +19,20 @@ import org.json.JSONException;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.example.portable_driving_test_system.data.QuestionRepository;
+import com.example.portable_driving_test_system.data.WrongQuestionRepository;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView tvMistakeCount;
+    private boolean preparingQuestionBank = true;
+    private int wrongCountRequestId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        tvMistakeCount = findViewById(R.id.tvMistakeCount);
 
         MaterialCardView btnPractice = findViewById(R.id.btnPractice);
         // 更新完成后再开放练习入口，避免读到旧章节或尚未导入的题库。
@@ -57,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                             getString(R.string.overview_question_count, questionCount)
                     );
                     btnPractice.setEnabled(true);
+                    preparingQuestionBank = false;
+                    refreshWrongQuestionCount();
                 });
 
             } catch (SQLiteException | IllegalStateException | IllegalArgumentException | IOException | JSONException e) {
@@ -68,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     tvOverviewHint.setText(R.string.overview_load_error);
+                    preparingQuestionBank = false;
+                    refreshWrongQuestionCount();
                 });
             }
         }).start();
@@ -80,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
         // 错题本入口
         MaterialCardView btnMistakes = findViewById(R.id.btnMistakes);
 
-        btnMistakes.setOnClickListener(view -> {Toast.makeText(MainActivity.this, R.string.mistakes_entry_hint, Toast.LENGTH_SHORT).show();
+        btnMistakes.setOnClickListener(view -> {
+            startActivity(new Intent(MainActivity.this, WrongQuestionActivity.class));
         });
 
         // 模拟考试入口
@@ -104,5 +115,40 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 首次启动等题库整理完成；从练习或错题本返回时重新读取。
+        if (!preparingQuestionBank) {
+            refreshWrongQuestionCount();
+        }
+    }
+
+    private void refreshWrongQuestionCount() {
+        int requestId = ++wrongCountRequestId;
+        tvMistakeCount.setText(R.string.home_stat_placeholder);
+        new Thread(() -> {
+            try {
+                long count = new WrongQuestionRepository(getApplicationContext())
+                        .getWrongQuestionCount();
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed() || requestId != wrongCountRequestId) {
+                        return;
+                    }
+                    tvMistakeCount.setText(getString(R.string.home_mistakes_count, count));
+                });
+            } catch (SQLiteException | IllegalStateException e) {
+                Log.e("WrongQuestions", "读取首页错题数量失败", e);
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed() || requestId != wrongCountRequestId) {
+                        return;
+                    }
+                    // 读取失败保留占位符，不将失败显示为零道错题。
+                    tvMistakeCount.setText(R.string.home_stat_placeholder);
+                });
+            }
+        }).start();
     }
 }
